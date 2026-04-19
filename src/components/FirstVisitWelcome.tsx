@@ -96,6 +96,8 @@ export function FirstVisitWelcome({ onClose }: Props) {
 
   const trafficLine = trafficLabel ? `Thanks for stopping by from ${trafficLabel}.` : null;
 
+  const hasBody = Boolean(cityLine || trafficLine);
+
   return (
     <div
       className={`fixed inset-0 z-[100] flex items-center justify-center px-4 transition-opacity duration-300 ${
@@ -116,32 +118,36 @@ export function FirstVisitWelcome({ onClose }: Props) {
         role="dialog"
         aria-modal="true"
         aria-labelledby="welcome-title"
-        aria-describedby="welcome-body"
+        {...(hasBody ? { "aria-describedby": "welcome-body" } : {})}
       >
-        <p id="welcome-title" className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-          {profile.name.split(" ")[0]}&apos;s portfolio
-        </p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-tight text-ink">
-          {greeting}! <span className="text-ink-muted">Nice to meet you.</span>
-        </h2>
-        <div id="welcome-body" className="mt-4 space-y-3 text-sm leading-relaxed text-ink-muted">
-          {cityLine && <p>{cityLine}</p>}
-          {trafficLine && <p>{trafficLine}</p>}
+        <button
+          type="button"
+          onClick={close}
+          className="absolute right-4 top-4 z-10 rounded-lg border border-surface-border bg-surface/80 p-2 text-ink-muted transition hover:border-accent/45 hover:text-accent"
+          aria-label="Close welcome"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+            <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" />
+          </svg>
+        </button>
+
+        <div className="pr-12">
+          <p id="welcome-title" className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
+            {profile.name.split(" ")[0]}&apos;s portfolio
+          </p>
+          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-ink">
+            {greeting}! <span className="text-ink-muted">Nice to meet you.</span>
+          </h2>
         </div>
+        {hasBody ? (
+          <div id="welcome-body" className="mt-4 space-y-3 text-sm leading-relaxed text-ink-muted">
+            {cityLine && <p>{cityLine}</p>}
+            {trafficLine && <p>{trafficLine}</p>}
+          </div>
+        ) : null}
 
         <div className="pointer-events-none mt-5 h-1 overflow-hidden rounded-full bg-surface-border" aria-hidden>
           <div className="welcome-progress h-full w-full origin-left rounded-full bg-accent" />
-        </div>
-
-        <div className="mt-4 flex items-center justify-between gap-3">
-          <p className="text-xs text-ink-muted">Closes automatically — or use Esc / click outside.</p>
-          <button
-            type="button"
-            onClick={close}
-            className="shrink-0 rounded-lg border border-surface-border bg-surface px-4 py-2 text-sm font-medium text-ink transition hover:border-accent/50 hover:text-accent"
-          >
-            Got it
-          </button>
         </div>
       </div>
     </div>
