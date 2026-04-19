@@ -7,13 +7,118 @@
 }
 
 html {
+  height: 100%;
   scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   min-height: 100vh;
+  height: 100%;
+  overflow: hidden;
   background: radial-gradient(ellipse 120% 80% at 50% -20%, #1e3a5f 0%, transparent 55%),
     #0b0f14;
   color: #e8eef5;
+}
+
+.horizontal-strip {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-inline: 1rem;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  mask-image: linear-gradient(to right, transparent, black 12px, black calc(100% - 12px), transparent);
+}
+
+.horizontal-strip::-webkit-scrollbar {
+  display: none;
+  height: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .horizontal-strip {
+    mask-image: none;
+  }
+}
+
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(56, 189, 248, 0.35) transparent;
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(56, 189, 248, 0.35);
+  border-radius: 999px;
+}
+
+.scrollbar-none {
+  scrollbar-width: none;
+}
+
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
+.reveal-up {
+  opacity: 0;
+  transform: translate3d(0, 22px, 0);
+  transition:
+    opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+}
+
+.reveal-up--visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+.welcome-progress {
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: welcome-progress linear 12s forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .welcome-progress {
+    animation: none;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes welcome-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Intro hero — single elevated surface */
+.intro-hero-card {
+  box-shadow:
+    0 0 0 1px rgba(56, 189, 248, 0.12),
+    0 1px 0 0 rgba(255, 255, 255, 0.04) inset,
+    0 24px 48px -16px rgba(0, 0, 0, 0.55);
+}
+
+.intro-photo-ring {
+  box-shadow:
+    0 0 0 2px rgba(56, 189, 248, 0.25),
+    0 12px 28px -8px rgba(0, 0, 0, 0.45);
 }
