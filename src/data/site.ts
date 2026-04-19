@@ -11,6 +11,12 @@ export const social = {
   phone: "tel:+918860503220",
 } as const;
 
+/** PDF in /public — replace the file when your resume updates */
+export const resume = {
+  href: "/Chandan_FullStack_FrontEnd_Resume.pdf",
+  downloadFileName: "Chandan_FullStack_FrontEnd_Resume.pdf",
+} as const;
+
 export const profile = {
   name: "Chandan Kumar",
   title: "Sr. Software Engineer · Front-end · Full-stack",

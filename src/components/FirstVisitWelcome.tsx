@@ -112,7 +112,7 @@ export function FirstVisitWelcome({ onClose }: Props) {
         onClick={close}
       />
       <div
-        className={`welcome-card relative z-[101] w-full max-w-md rounded-2xl border border-surface-border bg-surface-elevated/95 p-6 shadow-2xl shadow-black/40 backdrop-blur-md transition-all duration-300 ${
+        className={`welcome-card relative z-[101] w-full max-w-lg rounded-2xl border border-surface-border bg-surface-elevated/95 p-6 shadow-2xl shadow-black/40 backdrop-blur-md transition-all duration-300 ${
           exiting ? "scale-95 opacity-0" : "scale-100 opacity-100"
         }`}
         role="dialog"
@@ -135,7 +135,7 @@ export function FirstVisitWelcome({ onClose }: Props) {
           <p id="welcome-title" className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
             {profile.name.split(" ")[0]}&apos;s portfolio
           </p>
-          <h2 className="mt-2 text-2xl font-semibold tracking-tight text-ink">
+          <h2 className="mt-2 text-lg font-semibold leading-snug tracking-tight text-ink whitespace-nowrap sm:text-2xl">
             {greeting}! <span className="text-ink-muted">Nice to meet you.</span>
           </h2>
         </div>

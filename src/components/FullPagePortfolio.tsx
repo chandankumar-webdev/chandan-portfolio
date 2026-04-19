@@ -8,6 +8,7 @@ import {
   languages,
   profile,
   projects,
+  resume,
   skills,
   social,
 } from "@/data/site";
@@ -21,6 +22,16 @@ function MailIcon({ className }: { className?: string }) {
     <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
       <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
       <polyline points="22,6 12,13 2,6" />
+    </svg>
+  );
+}
+
+function DownloadIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden>
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+      <polyline points="7 10 12 15 17 10" />
+      <line x1="12" y1="15" x2="12" y2="3" />
     </svg>
   );
 }
@@ -362,8 +373,8 @@ export function FullPagePortfolio({ showScrollHint = false }: FullPagePortfolioP
             <Reveal scrollRoot={scrollRoot}>
               <div className="intro-hero-card rounded-3xl border border-accent/15 bg-gradient-to-b from-surface-elevated/95 to-[#0c1017]/98 p-6 backdrop-blur-md sm:p-8 lg:p-10">
                 <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
-                  <div className="relative mx-auto shrink-0 lg:mx-0">
-                    <div className="intro-photo-ring relative h-[8.75rem] w-[8.75rem] overflow-hidden rounded-2xl bg-surface sm:h-[10rem] sm:w-[10rem]">
+                  <div className="relative mx-auto flex w-[8.75rem] shrink-0 flex-col gap-3 sm:w-[10rem] lg:mx-0">
+                    <div className="intro-photo-ring relative aspect-square w-full overflow-hidden rounded-2xl bg-surface">
                       <Image
                         src={profile.photoSrc}
                         alt={profile.name}
@@ -374,6 +385,15 @@ export function FullPagePortfolio({ showScrollHint = false }: FullPagePortfolioP
                         sizes="(max-width:1024px) 140px, 160px"
                       />
                     </div>
+                    <a
+                      href={resume.href}
+                      download={resume.downloadFileName}
+                      className="flex w-full items-center justify-center gap-2 rounded-xl border border-accent/35 bg-accent/[0.08] px-3 py-2 text-sm font-medium text-accent transition hover:border-accent/55 hover:bg-accent/[0.12]"
+                      aria-label="Download resume PDF"
+                    >
+                      <DownloadIcon />
+                      Resume
+                    </a>
                   </div>
 
                   <div className="min-w-0 flex-1 space-y-5">
