@@ -1,13 +1,13 @@
-/** Labels for `?source=` — extend as needed for résumé/PDF links. */
+/** Labels for `?source=` — used when building “Thanks … from {label}”. Resume/PDF use custom welcome lines elsewhere. */
 const SOURCE_LABELS: Record<string, string> = {
   linkedin: "LinkedIn",
   naukri: "Naukri",
   github: "GitHub",
   indeed: "Indeed",
   glassdoor: "Glassdoor",
-  resume: "your résumé",
-  pdf: "your résumé PDF",
-  cv: "your CV",
+  resume: "Resume link",
+  pdf: "PDF link",
+  cv: "CV link",
   email: "email",
 };
 
@@ -23,7 +23,7 @@ function hostnameTrafficLabel(hostname: string): string | null {
 }
 
 /**
- * Prefer explicit `source` query param (résumé links); else infer from document.referrer.
+ * Prefer explicit `source` query param (resume PDF links, etc.); else infer from document.referrer.
  */
 export function resolveTrafficSource(
   sourceParam: string | null,
@@ -42,4 +42,29 @@ export function resolveTrafficSource(
   } catch {
     return null;
   }
+}
+
+/**
+ * Copy for the welcome popup. Resume/PDF/CV use dedicated lines — avoids awkward “from your resume” phrasing.
+ */
+export function getWelcomeTrafficLine(
+  sourceParam: string | null,
+  referrerLabel: string | null,
+): string | null {
+  const key = sourceParam?.trim().toLowerCase() ?? "";
+
+  if (key === "resume" || key === "résumé") {
+    return "Glad you followed my resume link — excited you're here!";
+  }
+  if (key === "cv") {
+    return "Glad you followed my CV link — excited you're here!";
+  }
+  if (key === "pdf") {
+    return "Great to see you after the PDF link — thanks for stopping by!";
+  }
+
+  if (referrerLabel) {
+    return `Thanks for stopping by from ${referrerLabel}.`;
+  }
+  return null;
 }

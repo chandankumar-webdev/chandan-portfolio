@@ -11,7 +11,11 @@ export const social = {
   phone: "tel:+918860503220",
 } as const;
 
-/** PDF in /public — replace the file when your resume updates */
+/**
+ * PDF in /public — replace the file when your resume updates.
+ * Put your live portfolio URL in your resume/PDF with `?source=resume` (e.g. `https://yoursite.com/?source=resume`)
+ * so the welcome modal uses the resume-specific message.
+ */
 export const resume = {
   href: "/Chandan_FullStack_FrontEnd_Resume.pdf",
   downloadFileName: "Chandan_FullStack_FrontEnd_Resume.pdf",

@@ -4,7 +4,7 @@ import { profile } from "@/data/site";
 import type { GeoPayload } from "@/lib/geo";
 import { readGeoCache, writeGeoCache } from "@/lib/geo-cache";
 import { getTimeGreeting } from "@/lib/greeting";
-import { resolveTrafficSource } from "@/lib/traffic-source";
+import { getWelcomeTrafficLine, resolveTrafficSource } from "@/lib/traffic-source";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const AUTO_DISMISS_MS = 12_000;
@@ -17,7 +17,7 @@ export function FirstVisitWelcome({ onClose }: Props) {
   const [show, setShow] = useState(false);
   const [greeting, setGreeting] = useState(() => getTimeGreeting());
   const [geo, setGeo] = useState<GeoPayload | null>(null);
-  const [trafficLabel, setTrafficLabel] = useState<string | null>(null);
+  const [trafficLine, setTrafficLine] = useState<string | null>(null);
   const [exiting, setExiting] = useState(false);
   const dismissed = useRef(false);
   const onCloseRef = useRef(onClose);
@@ -38,7 +38,8 @@ export function FirstVisitWelcome({ onClose }: Props) {
     const params = new URLSearchParams(window.location.search);
     const sourceParam = params.get("source");
     const ref = document.referrer || undefined;
-    setTrafficLabel(resolveTrafficSource(sourceParam, ref));
+    const label = resolveTrafficSource(sourceParam, ref);
+    setTrafficLine(getWelcomeTrafficLine(sourceParam?.trim() ?? null, label));
 
     if (sourceParam && window.history.replaceState) {
       try {
@@ -94,9 +95,16 @@ export function FirstVisitWelcome({ onClose }: Props) {
   const cityLine =
     geo?.city && geo.city.trim().length > 0 ? `Looks like you're visiting from ${geo.city.trim()}.` : null;
 
-  const trafficLine = trafficLabel ? `Thanks for stopping by from ${trafficLabel}.` : null;
-
   const hasBody = Boolean(cityLine || trafficLine);
+
+  const trafficAccentEmoji = (() => {
+    if (!trafficLine) return null;
+    const s = trafficLine.toLowerCase();
+    if (s.includes("pdf")) return "📕";
+    if (s.includes("cv link")) return "📋";
+    if (s.includes("resume link")) return "📄";
+    return "🌐";
+  })();
 
   return (
     <div
@@ -132,22 +140,51 @@ export function FirstVisitWelcome({ onClose }: Props) {
         </button>
 
         <div className="pr-12">
-          <p id="welcome-title" className="font-mono text-xs uppercase tracking-[0.2em] text-accent">
-            {profile.name.split(" ")[0]}&apos;s portfolio
+          <p
+            id="welcome-title"
+            className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-xs uppercase tracking-[0.2em] text-accent"
+          >
+            <span className="select-none text-base leading-none sm:text-[1.05rem]" aria-hidden>
+              ✨
+            </span>
+            <span>{profile.name.split(" ")[0]}&apos;s portfolio</span>
           </p>
-          <h2 className="mt-2 text-lg font-semibold leading-snug tracking-tight text-ink whitespace-nowrap sm:text-2xl">
-            {greeting}! <span className="text-ink-muted">Nice to meet you.</span>
+          <h2 className="mt-3 flex items-start gap-3 text-lg font-semibold leading-snug tracking-tight sm:gap-3.5 sm:text-2xl">
+            <span className="select-none pt-0.5 text-[1.35rem] leading-none sm:text-[1.6rem]" aria-hidden>
+              👋
+            </span>
+            <span className="min-w-0 text-ink">
+              <span className="whitespace-nowrap sm:whitespace-normal">{greeting}!</span>{" "}
+              <span className="text-ink-muted">Nice to meet you.</span>
+            </span>
           </h2>
         </div>
         {hasBody ? (
-          <div id="welcome-body" className="mt-4 space-y-3 text-sm leading-relaxed text-ink-muted">
-            {cityLine && <p>{cityLine}</p>}
-            {trafficLine && <p>{trafficLine}</p>}
+          <div id="welcome-body" className="mt-5 space-y-3.5 text-sm leading-relaxed text-ink-muted">
+            {cityLine && (
+              <p className="flex gap-3">
+                <span className="mt-0.5 shrink-0 text-base leading-none opacity-95" aria-hidden>
+                  📍
+                </span>
+                <span>{cityLine}</span>
+              </p>
+            )}
+            {trafficLine && (
+              <p className="flex gap-3">
+                <span className="mt-0.5 shrink-0 text-base leading-none opacity-95" aria-hidden>
+                  {trafficAccentEmoji ?? "🌐"}
+                </span>
+                <span>{trafficLine}</span>
+              </p>
+            )}
           </div>
         ) : null}
 
-        <div className="pointer-events-none mt-5 h-1 overflow-hidden rounded-full bg-surface-border" aria-hidden>
-          <div className="welcome-progress h-full w-full origin-left rounded-full bg-accent" />
+        <div className="mt-5 flex items-center gap-3" aria-hidden>
+          <span className="shrink-0 select-none text-[1.15rem] leading-none opacity-90">🚀</span>
+          <div className="pointer-events-none h-1 min-w-0 flex-1 overflow-hidden rounded-full bg-surface-border">
+            <div className="welcome-progress h-full w-full origin-left rounded-full bg-accent" />
+          </div>
         </div>
       </div>
     </div>
